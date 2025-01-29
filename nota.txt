@@ -1,0 +1,65 @@
+project/
+│
+├── assets/                             # Archivos de recursos (CSS, JS, imágenes, etc.)
+│   ├── bd/                             # Base de datos
+│   │   └── ecomerce.sql
+│   ├── css/                            # Estilos generales
+│   │   └── styles.css
+│   ├── plantilla/                      # Plantilla del dashboard
+│   │   ├── dashboard/                  # Estructura de la plantilla del dashboard
+│
+├── controllers/                        # Controladores de la aplicación
+│   ├── AuthController.php              # Controlador de autenticación
+│   ├── CategoryController.php          # Controlador de categorías
+│   ├── DashboardController.php         # Controlador del dashboard
+│   ├── LandingController.php           # Controlador de la landing page
+│   ├── ProductController.php           # Controlador de productos
+│   ├── ProfileController.php           # Controlador del perfil de usuario
+│   ├── RoleController.php              # Controlador de roles
+│   ├── SellerController.php            # Controlador de los vendedores
+│   ├── UserController.php              # Controlador de usuarios
+│
+├── models/                             # Modelos de la base de datos
+│   ├── CategoryModel.php               # Modelo de categorías
+│   ├── Database.php                    # Gestión de la conexión a la base de datos
+│   ├── ProductModel.php                # Modelo de productos
+│   ├── RoleModel.php                   # Modelo de roles
+│   ├── UserModel.php                   # Modelo de usuarios
+│
+├── views/                              # Vistas del proyecto
+│   ├── public/                         # Vistas accesibles al público (Landing, Login, Registro)
+│   │   ├── landing/
+│   │   │   └── landing.view.php        # Vista de la landing page
+│   │   ├── login/
+│   │   │   └── login.view.php          # Vista del login
+│   │   ├── register/
+│   │   │   └── register.view.php       # Vista del registro de usuario
+│   │
+│   ├── rol/                            # Vistas separadas por roles
+│   │   ├── admin/
+│   │   │   ├── dashboard/              # Vistas del Dashboard de Administrador
+│   │   │   │   ├── dashboard.view.php  # Panel principal del administrador
+│   │   │   │   ├── categories/         # CRUD de categorías
+│   │   │   │   ├── modules/            # Módulos del dashboard (header, footer, sidebar, etc.)
+│   │   │   │   ├── products/           # CRUD de productos
+│   │   │   │   ├── rol/                # CRUD de roles
+│   │   │   │   ├── user/               # CRUD de usuarios
+│   │   │   │   │   ├── create_user.php
+│   │   │   │   │   ├── read_users.php
+│   │   │   │   │   ├── update_user.php
+│   │
+│   │   ├── seller/                     # Vistas del Seller (Vendedor)
+│   │   │   ├── seller.view.php         # Vista principal del vendedor
+│   │
+│   │   ├── user/                       # Vistas del usuario estándar
+│   │   │   ├── profile.view.php        # Vista del perfil del usuario
+│   │   │   ├── modules/                # Módulos de la vista de usuario
+│   │   │   │   ├── 1head.php           # Head
+│   │   │   │   ├── 2nav_lat.php        # Barra lateral
+│   │   │   │   ├── 3contenido.php      # Contenido principal
+│   │   │   │   ├── 3edit.php           # Edición del perfil
+│   │   │   │   ├── 4footer.php         # Footer
+│
+├── index.php                           # Punto de entrada principal
+├── .htaccess                           # Configuración para redirección (opcional)
+└── README.md                           # Documentación básica del proyecto

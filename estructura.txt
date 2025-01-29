@@ -1,0 +1,167 @@
+Listado de rutas de carpetas
+El n£mero de serie del volumen es 70F7-035D
+C:.
+|   estructura.txt
+|   index.php
+|   nota.txt
+|   
++---assets
+|   +---bd
+|   |       ecomerce (2).sql
+|   |       
+|   +---css
+|   |       styles.css
+|   |       
+|   \---plantilla
+|       \---dashboard
+|           |   404.html
+|           |   client-list.html
+|           |   client-new.html
+|           |   client-search.html
+|           |   client-update.html
+|           |   company.html
+|           |   home.html
+|           |   index.html
+|           |   item-list.html
+|           |   item-new.html
+|           |   item-search.html
+|           |   item-update.html
+|           |   LICENSE
+|           |   reservation-list.html
+|           |   reservation-new.html
+|           |   reservation-pending.html
+|           |   reservation-reservation.html
+|           |   reservation-search.html
+|           |   reservation-update.html
+|           |   user-list.html
+|           |   user-new.html
+|           |   user-search.html
+|           |   user-update.html
+|           |   
+|           +---assets
+|           |   +---avatar
+|           |   |       Avatar.png
+|           |   |       
+|           |   +---icons
+|           |   |       mCSB_buttons.png
+|           |   |       
+|           |   \---img
+|           |           logo.png
+|           |           nav-font.jpg
+|           |           
+|           +---css
+|           |       all.css
+|           |       bootstrap-material-design.min.css
+|           |       bootstrap.min.css
+|           |       bootstrap.min.css.map
+|           |       jquery.mCustomScrollbar.css
+|           |       normalize.css
+|           |       style.css
+|           |       sweetalert2.min.css
+|           |       
+|           +---js
+|           |       bootstrap-material-design.min.js
+|           |       bootstrap.min.js
+|           |       bootstrap.min.js.map
+|           |       jquery-3.4.1.min.js
+|           |       jquery.mCustomScrollbar.concat.min.js
+|           |       main.js
+|           |       popper.min.js
+|           |       sweetalert2.min.js
+|           |       
+|           \---webfonts
+|                   fa-brands-400.eot
+|                   fa-brands-400.svg
+|                   fa-brands-400.ttf
+|                   fa-brands-400.woff
+|                   fa-brands-400.woff2
+|                   fa-regular-400.eot
+|                   fa-regular-400.svg
+|                   fa-regular-400.ttf
+|                   fa-regular-400.woff
+|                   fa-regular-400.woff2
+|                   fa-solid-900.eot
+|                   fa-solid-900.svg
+|                   fa-solid-900.ttf
+|                   fa-solid-900.woff
+|                   fa-solid-900.woff2
+|                   roboto-medium-webfont.woff
+|                   roboto-medium-webfont.woff2
+|                   robotocondensed-light-webfont.ttf
+|                   robotocondensed-light-webfont.woff
+|                   robotocondensed-light-webfont.woff2
+|                   robotocondensed-regular-webfont.woff
+|                   robotocondensed-regular-webfont.woff2
+|                   
++---controllers
+|       AuthController.php
+|       CategoryController.php
+|       DashboardController.php
+|       LandingController.php
+|       ProductController.php
+|       ProfileController.php
+|       RoleController.php
+|       SellerController.php
+|       UserController.php
+|       
++---models
+|       CategoryModel.php
+|       Database.php
+|       ProductModel.php
+|       RoleModel.php
+|       UserModel.php
+|       
+\---views
+    +---public
+    |   +---landing
+    |   |       landing.view.php
+    |   |       
+    |   +---login
+    |   |       login.view.php
+    |   |       
+    |   \---register
+    |           register.view.php
+    |           
+    \---rol
+        +---admin
+        |   \---dashboard
+        |       |   dashboard.view.php
+        |       |   
+        |       +---categories
+        |       |       create_category.php
+        |       |       read_categories.php
+        |       |       update_category.php
+        |       |       
+        |       +---modules
+        |       |       1head.php
+        |       |       2nav_lat.php
+        |       |       3contenido.php
+        |       |       4footer.php
+        |       |       
+        |       +---products
+        |       |       create_product.php
+        |       |       read_products.php
+        |       |       update_product.php
+        |       |       
+        |       +---rol
+        |       |       create_rol.php
+        |       |       delete_rol.php
+        |       |       read_roles.php
+        |       |       update_rol.php
+        |       |       
+        |       \---user
+        |               create_user.php
+        |               read_users.php
+        |               update_user.php
+        |               
+        +---seller
+        \---user
+            |   profile.view.php
+            |   
+            \---modules
+                    1head.php
+                    2nav_lat.php
+                    3contenido.php
+                    3edit.php
+                    4footer.php
+                    
