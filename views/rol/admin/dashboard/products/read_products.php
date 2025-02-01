@@ -64,6 +64,7 @@
                         Sin imagen
                     <?php endif; ?>
                 </td>
+
                 <td>
                     <?= htmlspecialchars($product->getImage() ?? 'Sin URL') ?>
                 </td>

@@ -80,6 +80,14 @@
 						</li>
 					</ul>
 				</li>
+				<li>
+					<a href="?c=LandingController&a=main"><i class="fa fa-eye fa-fw"></i> &nbsp; Ver Landing</a>
+				</li>
+				<br>
+
+				<li>
+					<a class="btn-exit-system-admin" href="?c=AuthController&a=logout"><i class="fa fa-door-open fa-fw"></i> &nbsp; Cerrar Sesion</a>
+				</li>
 
 
 			</ul>

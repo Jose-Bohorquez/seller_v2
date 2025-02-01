@@ -10,6 +10,7 @@ project/
 │
 ├── controllers/                        # Controladores de la aplicación
 │   ├── AuthController.php              # Controlador de autenticación
+│   ├── CarouselImageController.php     # Controlador de autenticación
 │   ├── CategoryController.php          # Controlador de categorías
 │   ├── DashboardController.php         # Controlador del dashboard
 │   ├── LandingController.php           # Controlador de la landing page
@@ -40,13 +41,29 @@ project/
 │   │   │   ├── dashboard/              # Vistas del Dashboard de Administrador
 │   │   │   │   ├── dashboard.view.php  # Panel principal del administrador
 │   │   │   │   ├── categories/         # CRUD de categorías
+│   │   │   │   │   ├── create_categories.php
+│   │   │   │   │   ├── read_categoriess.php
+│   │   │   │   │   ├── update_categories.php
 │   │   │   │   ├── modules/            # Módulos del dashboard (header, footer, sidebar, etc.)
+│   │   │   │   │   ├── header.php
+│   │   │   │   │   ├── content.php
+│   │   │   │   │   ├── footer.php
 │   │   │   │   ├── products/           # CRUD de productos
+│   │   │   │   │   ├── create_product.php
+│   │   │   │   │   ├── read_products.php
+│   │   │   │   │   ├── update_product.php
 │   │   │   │   ├── rol/                # CRUD de roles
+│   │   │   │   │   ├── create_rol.php
+│   │   │   │   │   ├── read_roles.php
+│   │   │   │   │   ├── update_rol.php
 │   │   │   │   ├── user/               # CRUD de usuarios
 │   │   │   │   │   ├── create_user.php
 │   │   │   │   │   ├── read_users.php
 │   │   │   │   │   ├── update_user.php
+│   │   │   │   ├── carousel/               # CRUD de usuarios
+│   │   │   │   │   ├── create_baner.php
+│   │   │   │   │   ├── read_baners.php
+│   │   │   │   │   ├── update_baner.php
 │   │
 │   │   ├── seller/                     # Vistas del Seller (Vendedor)
 │   │   │   ├── seller.view.php         # Vista principal del vendedor

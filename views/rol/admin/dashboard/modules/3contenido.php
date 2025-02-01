@@ -93,6 +93,15 @@
             </div>
         </a>
 
+        <!-- Banners -->
+        <a href="index.php?c=CarouselImageController&a=main" class="tile">
+            <div class="tile-tittle">Baners</div>
+            <div class="tile-icon">
+                <i class="fas fa-image fa-fw"></i>
+                <p>Gestionar Baners</p>
+            </div>
+        </a>
+
     </div>
 
 </section>

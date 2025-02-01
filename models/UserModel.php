@@ -128,33 +128,51 @@ class UserModel
         return $stmt->execute();
     }
 
-    public function updateUser()
+
+
+
+
+  
+    public function updateUser($id, $name, $lastname, $idNumber, $cel, $email, $rol, $password = null, $imageProfile = null)
     {
         $query = "
-            UPDATE user SET 
-                name = :name,
-                lastname = :lastname,
-                id_number = :id_number,
-                cel = :cel,
-                email = :email,
-                pass = :pass,
-                rol = :rol,
-                image_profile = :image_profile
-            WHERE id_user = :id_user
-        ";
+            UPDATE user 
+            SET name = :name, lastname = :lastname, id_number = :idNumber, cel = :cel, email = :email, 
+                rol = :rol, image_profile = :imageProfile
+            WHERE id_user = :id";
+        
+        // Si hay nueva contraseña, la incluimos en la actualización.
+        if (!empty($password)) {
+            $query = "
+                UPDATE user 
+                SET name = :name, lastname = :lastname, id_number = :idNumber, cel = :cel, email = :email, 
+                    pass = :password, rol = :rol, image_profile = :imageProfile
+                WHERE id_user = :id";
+        }
+    
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id_user', $this->id_user, PDO::PARAM_INT);
-        $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
-        $stmt->bindParam(':lastname', $this->lastname, PDO::PARAM_STR);
-        $stmt->bindParam(':id_number', $this->id_number, PDO::PARAM_STR);
-        $stmt->bindParam(':cel', $this->cel, PDO::PARAM_STR);
-        $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
-        $stmt->bindParam(':pass', $this->pass, PDO::PARAM_STR);
-        $stmt->bindParam(':rol', $this->rol, PDO::PARAM_INT);
-        $stmt->bindParam(':image_profile', $this->image_profile, PDO::PARAM_STR);
-
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+        $stmt->bindParam(':idNumber', $idNumber, PDO::PARAM_STR);
+        $stmt->bindParam(':cel', $cel, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
+        $stmt->bindParam(':imageProfile', $imageProfile, PDO::PARAM_STR);
+    
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        }
+    
         return $stmt->execute();
     }
+        
+
+
+
+
+    
 
     public function deleteUser()
     {

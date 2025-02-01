@@ -23,9 +23,12 @@
 <div class="container mt-4">
     <h1 class="text-center">Listado de Usuarios</h1>
     
-    <div class="text-end mb-3">
+    <div class="text-end mb-3 d-flex justify-content-between">  
         <a href="index.php?c=UserController&a=create" class="btn btn-success">
             <i class="fas fa-user-plus"></i> Crear Nuevo Usuario
+        </a>
+        <a href="index.php?c=DashboardController&a=main" class="btn btn-info">
+            <i class="fas fa-user-plus"></i> volver al dashboard
         </a>
     </div>
 

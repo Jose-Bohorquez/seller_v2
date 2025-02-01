@@ -41,52 +41,124 @@ class ProductController
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->productModel->setName($_POST['name']);
-            $this->productModel->setDescription($_POST['description']);
-            $this->productModel->setTechnicalDescription($_POST['technical_description']);
-            $this->productModel->setPrice(round($_POST['price']));
-            $this->productModel->setAmount($_POST['amount']);
-            $this->productModel->setCategory($_POST['category']);
-            $this->productModel->setImage($_POST['image']);
-            $this->productModel->setDiscount(round($_POST['discount']));// Manejar el descuento
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            $technical_description = $_POST['technical_description'];
+            $price = round($_POST['price']);
+            $amount = $_POST['amount'];
+            $category = $_POST['category'];
+            $discount = round($_POST['discount']);
+    
+            // Convertir el nombre a CamelCase para la carpeta
+            $productFolder = preg_replace('/[^a-zA-Z0-9]/', '', ucwords(str_replace(' ', '', $name)));
+    
+            // Crear la carpeta si no existe
+            $uploadDir = "assets/images/products/$productFolder/";
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+    
+            $imagePath = ''; // Ruta final de la imagen
+    
+            // Validar si se subió una imagen
+            if (!empty($_FILES['image']['name'])) {
+                $imageName = preg_replace('/[^a-zA-Z0-9]/', '', pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
+                $imageExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                $finalImageName = $imageName . '.' . $imageExt;
+    
+                $targetFile = $uploadDir . $finalImageName;
+    
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+                    $imagePath = $targetFile;
+                }
+            }
+    
+            // Guardar en el modelo
+            $this->productModel->setName($name);
+            $this->productModel->setDescription($description);
+            $this->productModel->setTechnicalDescription($technical_description);
+            $this->productModel->setPrice($price);
+            $this->productModel->setAmount($amount);
+            $this->productModel->setCategory($category);
+            $this->productModel->setImage($imagePath); // Guardar la ruta en la BD
+            $this->productModel->setDiscount($discount);
             $this->productModel->createProduct();
-
+    
             header('Location: index.php?c=ProductController&a=main');
             exit;
         }
-
+    
         $categories = $this->categoryModel->getAllCategories();
         require_once 'views/rol/admin/dashboard/products/create_product.php';
     }
+    
 
     // Actualizar un producto existente
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->productModel->setId($_POST['id']);
-            $this->productModel->setName($_POST['name']);
-            $this->productModel->setDescription($_POST['description']);
-            $this->productModel->setTechnicalDescription($_POST['technical_description']);
-            $this->productModel->setPrice($_POST['price']);
-            $this->productModel->setAmount($_POST['amount']);
-            $this->productModel->setCategory($_POST['category']);
-            $this->productModel->setImage($_POST['image']);
-            $this->productModel->setDiscount($_POST['discount']); // Manejar el descuento
+            $id = $_POST['id'];
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            $technical_description = $_POST['technical_description'];
+            $price = $_POST['price'];
+            $amount = $_POST['amount'];
+            $category = $_POST['category'];
+            $discount = $_POST['discount'];
+    
+            // Obtener el producto actual para ver si ya tiene imagen
+            $product = $this->productModel->getProductById($id);
+    
+            // Convertir el nombre a CamelCase
+            $productFolder = preg_replace('/[^a-zA-Z0-9]/', '', ucwords(str_replace(' ', '', $name)));
+            $uploadDir = "assets/images/products/$productFolder/";
+    
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+    
+            $imagePath = $product->getImage(); // Mantener la imagen si no se actualiza
+    
+            if (!empty($_FILES['image']['name'])) {
+                // Eliminar la imagen anterior si existe
+                if (!empty($product->getImage()) && file_exists($product->getImage())) {
+                    unlink($product->getImage());
+                }
+    
+                // Procesar la nueva imagen
+                $imageName = preg_replace('/[^a-zA-Z0-9]/', '', pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
+                $imageExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                $finalImageName = $imageName . '.' . $imageExt;
+    
+                $targetFile = $uploadDir . $finalImageName;
+    
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+                    $imagePath = $targetFile;
+                }
+            }
+    
+            // Actualizar en el modelo
+            $this->productModel->setId($id);
+            $this->productModel->setName($name);
+            $this->productModel->setDescription($description);
+            $this->productModel->setTechnicalDescription($technical_description);
+            $this->productModel->setPrice($price);
+            $this->productModel->setAmount($amount);
+            $this->productModel->setCategory($category);
+            $this->productModel->setImage($imagePath);
+            $this->productModel->setDiscount($discount);
             $this->productModel->updateProduct();
-
+    
             header('Location: index.php?c=ProductController&a=main');
             exit;
         } elseif (isset($_GET['id'])) {
-            // Obtener el producto por su ID
             $product = $this->productModel->getProductById($_GET['id']);
-
-            // Obtener todas las categorías disponibles
             $categories = $this->categoryModel->getAllCategories();
-
-            // Pasar los datos a la vista
             require_once 'views/rol/admin/dashboard/products/update_product.php';
         }
     }
+    
+    
 
     // Eliminar un producto
     public function delete()

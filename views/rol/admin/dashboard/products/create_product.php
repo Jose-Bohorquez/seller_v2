@@ -40,7 +40,9 @@
 <body>
 
 <h1 style="text-align: center;">Crear Nuevo Producto</h1>
-<form action="index.php?c=ProductController&a=create" method="POST">
+
+<form action="index.php?c=ProductController&a=create" method="POST" enctype="multipart/form-data">
+
     <!-- Nombre del producto -->
     <label for="name">Nombre:</label>
     <input type="text" id="name" name="name" required>
@@ -76,9 +78,13 @@
     <label for="discount">Descuento (%):</label>
     <input type="number" id="discount" name="discount" step="1" min="0" max="100" placeholder="Ej: 10">
 
+
+
     <!-- Imagen -->
-    <label for="image">Imagen (URL):</label>
-    <input type="text" id="image" name="image" placeholder="Ej: https://example.com/imagen.jpg">
+    <label for="image">Seleccionar Imagen:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+
+    
 
     <!-- Botón Guardar -->
     <button type="submit">Guardar</button>

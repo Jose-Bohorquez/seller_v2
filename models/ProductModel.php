@@ -36,8 +36,8 @@
         public function setPrice($price) { $this->price = $price; }
 
         public function getAmount() { return $this->amount; }
-        public function setAmount($amount) { $this->amount = $amount; }
-
+        public function setAmount($amount) { $this->amount = $amount ?? 0; /* Si $amount es null, asignar 0 como fallback */ }
+        
         public function getCategory() { return $this->category; }
         public function setCategory($category) { $this->category = $category; }
 
@@ -61,6 +61,7 @@
 
 
         // CRUD Operations
+        //read
         public function getAllProducts()
         {
             $query = "
@@ -104,6 +105,7 @@
             return $products;
         }
 
+        //buscar 1 producto por id
         public function getProductById($id)
         {
             $query = "
@@ -140,6 +142,7 @@
             return null;
         }
 
+        //create product
         public function createProduct()
         {
             $query = "INSERT INTO products (name, description, technical_description, price, amount, category, image, discount)
@@ -157,6 +160,7 @@
             return $stmt->execute();
         }
 
+        //update product
         public function updateProduct()
         {
             $query = "UPDATE products SET 
@@ -183,6 +187,7 @@
             return $stmt->execute();
         }
 
+        //delete product
         public function deleteProduct()
         {
             $query = "DELETE FROM products WHERE id = :id";
@@ -191,6 +196,94 @@
 
             return $stmt->execute();
         }
+
+        // Métodos para la vista de Landing// En project/models/ProductModel.php
+        public function getProductsByCategory($categoryId, $limit = null, $offset = null)
+{
+    $query = "
+        SELECT 
+            p.id, 
+            p.name, 
+            p.description, 
+            p.price, 
+            p.image, 
+            p.discount, 
+            p.final_price, 
+            p.amount, 
+            c.name_category AS category_name
+        FROM 
+            products p
+        LEFT JOIN 
+            category c ON p.category = c.id_category
+        WHERE 
+            (:categoryId IS NULL OR p.category = :categoryId) 
+            AND p.amount > 0
+    ";
+
+    if ($limit !== null && $offset !== null) {
+        $query .= " LIMIT :limit OFFSET :offset";
+    }
+
+    $stmt = $this->db->prepare($query);
+
+    // Vincula el parámetro categoryId correctamente según su valor
+    if ($categoryId === null) {
+        $stmt->bindValue(':categoryId', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+    }
+
+    // Vincula limit y offset si están presentes
+    if ($limit !== null && $offset !== null) {
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    }
+
+    $stmt->execute();
+
+    $products = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $product = new ProductModel($this->db);
+        $product->setId($row['id']);
+        $product->setName($row['name']);
+        $product->setDescription($row['description']);
+        $product->setPrice($row['price']);
+        $product->setImage($row['image']);
+        $product->setDiscount($row['discount']);
+        $product->setFinalPrice($row['final_price']);
+        $product->setCategoryName($row['category_name']);
+        $product->setAmount($row['amount']);
+        $products[] = $product;
+    }
+
+    return $products;
+}
+
+        
+        
+
+        
+
+        
+
+        public function countProductsByCategory($categoryId)
+        {
+            $query = "
+                SELECT COUNT(*) AS total
+                FROM products
+                WHERE (:categoryId IS NULL OR category = :categoryId)
+            ";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'];
+        }
+
+
+
+
     }
 
 

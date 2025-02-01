@@ -39,46 +39,122 @@ class UserController
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->userModel->setName($_POST['name']);
-            $this->userModel->setLastname($_POST['lastname']);
-            $this->userModel->setIdNumber($_POST['id_number']);
-            $this->userModel->setCel($_POST['cel']);
-            $this->userModel->setEmail($_POST['email']);
-            $this->userModel->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT)); // Contraseña encriptada
-            $this->userModel->setRol($_POST['rol']);
-            $this->userModel->setImageProfile($_POST['image_profile']);
+            $name = $_POST['name'];
+            $lastname = $_POST['lastname'];
+            $id_number = $_POST['id_number'];
+            $cel = $_POST['cel'];
+            $email = $_POST['email'];
+            $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
+            $rol = $_POST['rol'];
+    
+            $profileDir = "assets/images/profile/$id_number/";
+            if (!is_dir($profileDir)) {
+                mkdir($profileDir, 0777, true);
+            }
+    
+            $imagePath = 'assets/images/profile/default.png'; // Imagen por defecto
+    
+            if (!empty($_FILES['image_profile']['name'])) {
+                $imageName = preg_replace('/[^a-zA-Z0-9]/', '', pathinfo($_FILES['image_profile']['name'], PATHINFO_FILENAME));
+                $imageExt = strtolower(pathinfo($_FILES['image_profile']['name'], PATHINFO_EXTENSION));
+                $finalImageName = $imageName . '.' . $imageExt;
+                $targetFile = $profileDir . $finalImageName;
+    
+                if (move_uploaded_file($_FILES['image_profile']['tmp_name'], $targetFile)) {
+                    $imagePath = $targetFile; // Solo cambia si la imagen se subió bien
+                } else {
+                    echo "⚠️ Error al mover el archivo. Código de error: " . $_FILES['image_profile']['error'];
+                }
+            }
+    
+            $this->userModel->setName($name);
+            $this->userModel->setLastname($lastname);
+            $this->userModel->setIdNumber($id_number);
+            $this->userModel->setCel($cel);
+            $this->userModel->setEmail($email);
+            $this->userModel->setPass($pass);
+            $this->userModel->setRol($rol);
+            $this->userModel->setImageProfile($imagePath);
             $this->userModel->createUser();
-
+    
             header('Location: index.php?c=UserController&a=main');
             exit;
         }
-
-        $roles = $this->roleModel->getAllRoles(); // Obtener los roles
+    
+        $roles = $this->roleModel->getAllRoles();
         require_once 'views/rol/admin/dashboard/user/create_user.php';
     }
+    
+    
+
+
+
+
+
 
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->userModel->setIdUser($_POST['id_user']);
-            $this->userModel->setName($_POST['name']);
-            $this->userModel->setLastname($_POST['lastname']);
-            $this->userModel->setIdNumber($_POST['id_number']);
-            $this->userModel->setCel($_POST['cel']);
-            $this->userModel->setEmail($_POST['email']);
-            $this->userModel->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT)); // Contraseña encriptada
-            $this->userModel->setRol($_POST['rol']);
-            $this->userModel->setImageProfile($_POST['image_profile']);
-            $this->userModel->updateUser();
-
+            $id = $_POST['id_user'];
+            $name = $_POST['name'];
+            $lastname = $_POST['lastname'];
+            $id_number = $_POST['id_number'];
+            $cel = $_POST['cel'];
+            $email = $_POST['email'];
+            $pass = !empty($_POST['pass']) ? password_hash($_POST['pass'], PASSWORD_DEFAULT) : null;
+            $rol = $_POST['rol'];
+    
+            $user = $this->userModel->getUserById($id);
+            if (!$user) {
+                header("Location: index.php?c=UserController&a=main&m=userNotFound");
+                exit;
+            }
+    
+            $profileDir = "assets/images/profile/$id_number/";
+            if (!is_dir($profileDir)) {
+                mkdir($profileDir, 0777, true);
+            }
+    
+            $imagePath = $user->getImageProfile(); // Mantener la imagen si no se actualiza
+    
+            if (!empty($_FILES['image_profile']['name'])) {
+                if (!empty($imagePath) && file_exists($imagePath)) {
+                    unlink($imagePath); // Eliminar la imagen anterior
+                }
+    
+                $imageName = preg_replace('/[^a-zA-Z0-9]/', '', pathinfo($_FILES['image_profile']['name'], PATHINFO_FILENAME));
+                $imageExt = strtolower(pathinfo($_FILES['image_profile']['name'], PATHINFO_EXTENSION));
+                $finalImageName = $imageName . '.' . $imageExt;
+                $targetFile = $profileDir . $finalImageName;
+    
+                if (move_uploaded_file($_FILES['image_profile']['tmp_name'], $targetFile)) {
+                    $imagePath = $targetFile;
+                }
+            }
+    
+            // 🔥 Ahora pasamos el `rol` correctamente
+            $this->userModel->updateUser($id, $name, $lastname, $id_number, $cel, $email, $rol, $pass, $imagePath);
+    
             header('Location: index.php?c=UserController&a=main');
             exit;
         } elseif (isset($_GET['id'])) {
             $user = $this->userModel->getUserById($_GET['id']);
-            $roles = $this->roleModel->getAllRoles(); // Obtener los roles
+            if (!$user) {
+                header("Location: index.php?c=UserController&a=main&m=userNotFound");
+                exit;
+            }
+    
+            $roles = $this->roleModel->getAllRoles();
             require_once 'views/rol/admin/dashboard/user/update_user.php';
         }
     }
+    
+
+
+    
+
+
+
 
     public function delete()
     {
