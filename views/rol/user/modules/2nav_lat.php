@@ -44,6 +44,10 @@
 					</ul>
 				</li>
 
+				<li>
+					<a href="?c=LandingController&a=main"><i class="fab fa-dashcube fa-fw"></i> &nbsp;Ir a comprar</a>
+				</li>
+
 
 			</ul>
 		</nav>
