@@ -646,19 +646,58 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- SweetAlert2 para mensajes de éxito o error mensaje de exito o error de login -->
-<?php if (isset($_GET['m']) && $_GET['m'] === 'loginOk'): ?>
+<!-- SweetAlert2 para mensajes de éxito o error -->
+<!-- SweetAlert2 para mensajes de éxito o error -->
+<?php if (isset($_GET['m'])): ?>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    Swal.fire({
-      icon: 'success',
-      title: 'Bienvenido',
-      text: 'Has iniciado sesión exitosamente.',
-      confirmButtonText: 'OK'
-    });
-  });
+document.addEventListener('DOMContentLoaded', function() {
+  let mensaje = "<?php echo $_GET['m']; ?>";
+
+  switch (mensaje) {
+    case 'regOk':
+      Swal.fire({
+        icon: 'success',
+        title: '¡Registro Exitoso!',
+        text: 'Te has registrado correctamente. ¡Ahora puedes iniciar sesión!',
+        confirmButtonText: 'OK'
+      });
+      break;
+
+    case 'loginOk':
+      Swal.fire({
+        icon: 'success',
+        title: '¡Sesión Iniciada!',
+        text: 'Has iniciado sesión exitosamente. ¡Ahora puedes comprar!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        // Redirección tras pulsar "OK"
+        window.location = 'index.php';
+      });
+      break;
+
+    case 'logoutOk':
+      Swal.fire({
+        icon: 'success',
+        title: '¡Sesión Cerrada!',
+        text: 'Has cerrado sesión exitosamente.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        // Redirección tras pulsar "OK"
+        window.location = 'index.php';
+      });
+      break;
+
+    // Puedes agregar más casos si los necesitas
+    // case 'otraCosa':
+    //   ...
+    //   break;
+  }
+});
 </script>
 <?php endif; ?>
+
+
+
 
 
 </body>

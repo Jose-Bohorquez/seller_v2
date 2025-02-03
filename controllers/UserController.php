@@ -171,7 +171,6 @@ class UserController
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Validar y procesar los datos del formulario
             $this->userModel->setName($_POST['name']);
             $this->userModel->setLastname($_POST['lastname']);
             $this->userModel->setIdNumber($_POST['id_number']);
@@ -180,17 +179,41 @@ class UserController
             $this->userModel->setPass(password_hash($_POST['pass'], PASSWORD_BCRYPT));
             $this->userModel->setRol(4); // Rol fijo para usuarios externos
             $this->userModel->setImageProfile($_POST['image_profile'] ?? null);
-
-            $this->userModel->createUser();
-
-            // Redirigir al landing con mensaje
-            header('Location: index.php?c=LandingController&a=main&m=regOk');
-            exit;
+    
+            $result = $this->userModel->createUser();
+    
+            if ($result === true) {
+                // Éxito
+                header('Location: index.php?c=LandingController&a=main&m=regOk');
+                exit;
+            } elseif ($result === 'duplicate_email') {
+                // Email ya existe
+                header('Location: index.php?c=UserController&a=register&m=dupEmail');
+                exit;
+            } elseif ($result === 'duplicate_idNumber') {
+                // id_number ya existe
+                header('Location: index.php?c=UserController&a=register&m=dupId');
+                exit;
+            } elseif ($result === 'duplicate_cel') {
+                // cel ya existe
+                header('Location: index.php?c=UserController&a=register&m=dupCel');
+                exit;
+            } elseif ($result === 'duplicate_other') {
+                // Algún otro índice UNIQUE se violó
+                header('Location: index.php?c=UserController&a=register&m=dupOther');
+                exit;
+            } else {
+                // Error genérico de BD
+                header('Location: index.php?c=UserController&a=register&m=error');
+                exit;
+            }
         }
-
-        // Cargar la vista de registro externo
+    
+        // Cargar la vista de registro
         require_once 'views/public/register/register.view.php';
     }
+    
+    
 
 
 

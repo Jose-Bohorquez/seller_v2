@@ -58,7 +58,7 @@
                         $cart->revertStockAndCleanCart();
                     }
                     session_destroy();
-                    header('Location: index.php?c=LandingController&a=main');
+                    header('Location: index.php?c=LandingController&a=main&m=logoutOk');
                     exit;
                 }
 

@@ -111,22 +111,49 @@ class UserModel
 
     public function createUser()
     {
-        $query = "
-            INSERT INTO user (name, lastname, id_number, cel, email, pass, rol, image_profile)
-            VALUES (:name, :lastname, :id_number, :cel, :email, :pass, :rol, :image_profile)
-        ";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
-        $stmt->bindParam(':lastname', $this->lastname, PDO::PARAM_STR);
-        $stmt->bindParam(':id_number', $this->id_number, PDO::PARAM_STR);
-        $stmt->bindParam(':cel', $this->cel, PDO::PARAM_STR);
-        $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
-        $stmt->bindParam(':pass', $this->pass, PDO::PARAM_STR);
-        $stmt->bindParam(':rol', $this->rol, PDO::PARAM_INT);
-        $stmt->bindParam(':image_profile', $this->image_profile, PDO::PARAM_STR);
-
-        return $stmt->execute();
+        try {
+            $query = "
+                INSERT INTO user (name, lastname, id_number, cel, email, pass, rol, image_profile)
+                VALUES (:name, :lastname, :id_number, :cel, :email, :pass, :rol, :image_profile)
+            ";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindParam(':lastname', $this->lastname, PDO::PARAM_STR);
+            $stmt->bindParam(':id_number', $this->id_number, PDO::PARAM_STR);
+            $stmt->bindParam(':cel', $this->cel, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindParam(':pass', $this->pass, PDO::PARAM_STR);
+            $stmt->bindParam(':rol', $this->rol, PDO::PARAM_INT);
+            $stmt->bindParam(':image_profile', $this->image_profile, PDO::PARAM_STR);
+    
+            $stmt->execute();
+            return true;  // Éxito
+        } catch (PDOException $e) {
+    
+            // Verificar si es violación de UNIQUE => $e->errorInfo[1] == 1062
+            if ($e->errorInfo[1] == 1062) {
+                // Mensaje tipo "Duplicate entry '...' for key 'user.email'"
+                $errorMsg = $e->errorInfo[2];
+    
+                // Detectar campo repetido
+                if (stripos($errorMsg, 'user.email') !== false) {
+                    return 'duplicate_email';
+                } elseif (stripos($errorMsg, 'user.id_number') !== false) {
+                    return 'duplicate_idNumber';
+                } elseif (stripos($errorMsg, 'user.cel') !== false) {
+                    return 'duplicate_cel';
+                } else {
+                    // Por si tienes otro índice único
+                    return 'duplicate_other';
+                }
+            } else {
+                // Otro tipo de error
+                return 'error';
+            }
+        }
     }
+    
+    
 
 
 
